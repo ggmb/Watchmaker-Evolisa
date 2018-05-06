@@ -15,7 +15,7 @@ public class AddCircleMutation implements EvolutionaryOperator<List<Circle>>{
             // A single circle is added with the configured probability, unless
             // we already have the maximum permitted number of circles.
         	//probability of adding one is 2%
-            if (candidate.size() < 50 && (rng.nextDouble()<0.03)){
+            if (candidate.size() < 50 && (rng.nextDouble()<0.02)){
             	List<Circle> newCircles = new ArrayList<Circle>(candidate);
                 newCircles.add(rng.nextInt(newCircles.size() + 1),
                                 CircleFactory.createRandomCircle(rng));

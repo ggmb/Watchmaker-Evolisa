@@ -13,14 +13,15 @@ public class FitnessFunction implements FitnessEvaluator<List<Circle>>{
 	@Override
 	public double getFitness(List<Circle> candidates, 
 							 List<? extends List<Circle>> population) {
+		int fitness;
 		// TODO Auto-generated method stub
 		
 		UserInterface.canvas.setCircles(candidates);
 		UserInterface.canvas.repaint();
 		BufferedImage fitnessImage = createImage(UserInterface.canvas);
-		UserInterface.tempFitness = generateFitness(UserInterface.targetImage, fitnessImage);
+		fitness = generateFitness(UserInterface.targetImage, fitnessImage);
 		
-		return UserInterface.tempFitness;
+		return fitness;
 	}
 
 	/*
@@ -95,7 +96,7 @@ public class FitnessFunction implements FitnessEvaluator<List<Circle>>{
 	 * Creating a bufferedImage object out of a Canvas object.
 	 * This is to be able to retrieve its RGB value later
 	 */
-	public static BufferedImage createImage(Canvas panel) {
+	public static synchronized BufferedImage createImage(Canvas panel) {
 	    int width  = panel.getWidth();
 	    int height = panel.getHeight();
 	    BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);

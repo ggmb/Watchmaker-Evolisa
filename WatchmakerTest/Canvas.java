@@ -26,7 +26,7 @@ public class Canvas extends JPanel{
 		}
 	}
 	
-	public void setCircles(List<Circle> circles){
+	public synchronized void setCircles(List<Circle> circles){
 		this.paintingCircles.clear();
 		for (Circle circle : circles){
 			this.paintingCircles.add(circle);

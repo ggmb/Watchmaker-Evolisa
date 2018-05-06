@@ -14,7 +14,7 @@ public class RemoveCircleMutation implements EvolutionaryOperator<List<Circle>>{
             // A single circle is removed with the configured probability, unless
             // we already have the minimum permitted number of circles.
         	//probability of removing one is 2%
-            if (candidate.size() > 2 && (rng.nextDouble() < 0.015)){
+            if (candidate.size() > 2 && (rng.nextDouble() < 0.02)){
             	List<Circle> newCircles = new ArrayList<Circle>(candidate);
                 newCircles.remove(rng.nextInt(newCircles.size()));
                 mutatedCandidates.add(newCircles);

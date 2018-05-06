@@ -27,8 +27,8 @@ import org.uncommons.watchmaker.framework.GenerationalEvolutionEngine;
 import org.uncommons.watchmaker.framework.PopulationData;
 import org.uncommons.watchmaker.framework.SelectionStrategy;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
-import org.uncommons.watchmaker.framework.selection.RouletteWheelSelection;
 import org.uncommons.watchmaker.framework.selection.TournamentSelection;
+import org.uncommons.watchmaker.framework.selection.TruncationSelection;
 import org.uncommons.watchmaker.framework.termination.GenerationCount;
 import org.uncommons.watchmaker.framework.termination.TargetFitness;
 import javax.swing.JButton;
@@ -149,7 +149,7 @@ public class UserInterface {
 			FitnessEvaluator<List<Circle>> evaluator
             = new CachingFitnessEvaluator<List<Circle>>(new FitnessFunction());
 			
-			SelectionStrategy<Object> selection = new TournamentSelection(new Probability(1));
+			SelectionStrategy<Object> selection = new TournamentSelection(new Probability(0.7));
 			Random rng = new MersenneTwisterRNG();
 			
 			EvolutionEngine<List<Circle>> engine
@@ -167,7 +167,7 @@ public class UserInterface {
 					System.out.printf("Generation %d: %s\n",
 	                          data.getGenerationNumber(),
 	                          data.getBestCandidate().size());
-					System.out.println(tempFitness);
+			
 					/*
 					
 	                
@@ -183,7 +183,7 @@ public class UserInterface {
 			
 			
 			//new Stagnation(1000, false)
-			return engine.evolve(1, 0, abort  ); // , new TargetFitness( 1000, true), new GenerationCount(100));
+			return engine.evolve(5, 2, abort  ); // , new TargetFitness( 1000, true), new GenerationCount(100));
 		}
 		
 		@Override

@@ -167,28 +167,16 @@ public class UserInterface {
 					System.out.printf("Generation %d: %s\n",
 	                          data.getGenerationNumber(),
 	                          data.getBestCandidate().size());
-			
-					/*
-					
-	                
-					for (Circle circle : data.getBestCandidate()){
-						System.out.print("Width: "+circle.getWidth());
-						System.out.println(" Height: "+circle.getHeight());
-					}
-					*/
-					//BufferedImage fitnessImage = createImage(fitnessCanvas);
 					
 				}
 			});
 			
-			
 			//new Stagnation(1000, false)
-			return engine.evolve(5, 2, abort  ); // , new TargetFitness( 1000, true), new GenerationCount(100));
+			return engine.evolve(5, 1, abort  ); // , new TargetFitness( 1000, true), new GenerationCount(100));
 		}
 		
 		@Override
         protected void postProcessing(List<Circle> result){
-            //System.out.println("Number of Circles: "+result.size());
             abort.reset(); //reset so the program can be run again
         }
 		

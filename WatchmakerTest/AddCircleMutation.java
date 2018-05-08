@@ -8,7 +8,7 @@ import org.uncommons.watchmaker.framework.EvolutionaryOperator;
 public class AddCircleMutation implements EvolutionaryOperator<List<Circle>>{
 
 	@Override
-	public List<List<Circle>> apply(List<List<Circle>> candidates, Random rng) {
+	public synchronized List<List<Circle>> apply(List<List<Circle>> candidates, Random rng) {
 		List<List<Circle>> mutatedCandidates = new ArrayList<List<Circle>>(candidates.size());
         for (List<Circle> candidate : candidates)
         {

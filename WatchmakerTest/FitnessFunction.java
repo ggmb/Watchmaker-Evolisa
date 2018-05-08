@@ -11,15 +11,14 @@ public class FitnessFunction implements FitnessEvaluator<List<Circle>>{
 	public static Object lock = new Object(); //Simple way of synchronising a variable in generateFitness()
 	
 	@Override
-	public double getFitness(List<Circle> candidates, 
+	public synchronized double getFitness(List<Circle> candidates, 
 							 List<? extends List<Circle>> population) {
 		int fitness;
-		// TODO Auto-generated method stub
 		
-		UserInterface.canvas.setCircles(candidates);
+		UserInterface.canvas.setCircles(candidates); //set the canvas circles, and paint them
 		UserInterface.canvas.repaint();
-		BufferedImage fitnessImage = createImage(UserInterface.canvas);
-		fitness = generateFitness(UserInterface.targetImage, fitnessImage);
+		BufferedImage fitnessImage = createImage(UserInterface.canvas); //create a buffered image from the canvas
+		fitness = generateFitness(UserInterface.targetImage, fitnessImage); //compare the two images
 		
 		return fitness;
 	}
@@ -66,22 +65,19 @@ public class FitnessFunction implements FitnessEvaluator<List<Circle>>{
 		int fitness = 0;
 		
 		
-		synchronized(lock){ //using an object for the sole purpose of synchronizing the fitness variable
 			getDeltaComponent("red", originalImage, candidate);
 			int red = getDeltaComponent("red", originalImage, candidate);
 			fitness += red;
-		}
 		
-		synchronized(lock){
+		
 			getDeltaComponent("green", originalImage, candidate);
 			int green = getDeltaComponent("green", originalImage, candidate);
 			fitness += green;
-		}
-		synchronized(lock){
+		
 			getDeltaComponent("blue", originalImage, candidate);
 			int blue = getDeltaComponent("blue", originalImage, candidate);	
 			fitness += blue;
-		}
+		
 		return fitness;
 	}
 	

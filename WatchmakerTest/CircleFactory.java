@@ -1,4 +1,4 @@
-package WatchmakerTest;
+ package WatchmakerTest;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -25,15 +25,19 @@ public class CircleFactory extends AbstractCandidateFactory<List<Circle>>{
 	public static Circle createRandomCircle(Random rng){
 		int x; int y; Color c;
 		
-		int red   = (int)(rng.nextDouble()*255);   //creating random color 0-255
-		int green = (int)(rng.nextDouble()*255);
-		int blue  = (int)(rng.nextDouble()*255);
-		int alpha = (int)(rng.nextDouble()*127);
-
-		x = (int)(rng.nextDouble()*UserInterface.targetImage.getWidth());
-		y = (int)(rng.nextDouble()*UserInterface.targetImage.getHeight());
+		int red   = rng.nextInt(255);   //creating random color 0-255
+		int green = rng.nextInt(255);
+		int blue  = rng.nextInt(255);
+		int alpha = rng.nextInt(117) + 10; //we want alpha to not be very opaque, so maximum value is just 127
+										   //we also want it to be a bit visible, so minimum is 10
+		x = rng.nextInt(UserInterface.targetImage.getWidth());
+		y = rng.nextInt(UserInterface.targetImage.getHeight());
+		
+		int width  = rng.nextInt(20)+30;
+		int height = rng.nextInt(20)+30;
+		
 		c = new Color(red, green, blue, alpha);		
-		return new Circle(x, y, 30, 30, c); //choose 30*30 size while testing
+		return new Circle(x, y, width, height, c); //choose 30*30 size while testing
 	}
 
 }

@@ -11,18 +11,21 @@ import org.uncommons.watchmaker.framework.EvolutionaryOperator;
 public class CircleColorMutation implements EvolutionaryOperator<List<Circle>>{
 
 	@Override
-	public List<List<Circle>> apply(List<List<Circle>> candidates, Random rng) {		
+	public synchronized List<List<Circle>> apply(List<List<Circle>> candidates, Random rng) {		
         List<List<Circle>> mutatedCandidates = new ArrayList<List<Circle>>(candidates.size());
-		List<Circle> newCircles = new ArrayList<Circle>(candidates.size());
 		
 		if (rng.nextDouble()<0.01){ //1% probability	
-			for (Circle circle : candidates.get(0)){
-        		Color newColor = mutateColor(circle.getColor());
-        		circle.setColor(newColor);
-	        	newCircles.add(circle);	
-	        }
-	        mutatedCandidates.add(newCircles);
-	        return mutatedCandidates;
+			for (List<Circle> list : candidates){
+				List<Circle> newCircles = new ArrayList<Circle>(list.size());
+				for (Circle circle : list){
+	        		Color newColor = mutateColor(circle.getColor());
+	        		Circle newCircle = new Circle(circle.getX(), circle.getY(), 
+	        										circle.getWidth(), circle.getHeight(), newColor); 
+		        	newCircles.add(newCircle);	
+		        }
+		        mutatedCandidates.add(newCircles);
+			}
+			return mutatedCandidates;
 		}
 		else return candidates;
 	}
@@ -36,60 +39,60 @@ public class CircleColorMutation implements EvolutionaryOperator<List<Circle>>{
     	Color mutatedColor;
     	
     	//create the number by which we will mutate the color component (max is 20)
-    	Double newRed = (new MersenneTwisterRNG().nextDouble() * 20.0);
+    	int newRed = (new MersenneTwisterRNG().nextInt(20) );
     	if ((new MersenneTwisterRNG().nextDouble() < 0.5) || (color.getRed() == 255)){ //50% chance to either add or subtract
     		newRed *= -1;
     	}
-    	newRed = (double)color.getRed() + newRed; //apply the mutation to the color
+    	newRed = color.getRed() + newRed; //apply the mutation to the color
     	if (newRed < 0){ //if the value has become out of range (<0) leave it at 0
-    		newRed = 0.0; 
+    		newRed = 0; 
     	}
     	if (newRed > 255){ //if the value has become out of range (>255) leave it at 255
-    		newRed = 255.0; 
+    		newRed = 255; 
     	}
     	
     	//create the number by which we will mutate the color component (max is 20)
-    	Double newGreen = (new MersenneTwisterRNG().nextDouble() * 20.0);
+    	int newGreen = new MersenneTwisterRNG().nextInt(20) ;
     	if ((new MersenneTwisterRNG().nextDouble() < 0.5) || (color.getGreen() == 255)){ //50% chance to either add or subtract
     		newGreen *= -1;
     	}
-    	newGreen = (double)color.getGreen() + newGreen; //apply the mutation to the color
+    	newGreen = color.getGreen() + newGreen; //apply the mutation to the color
     	if (newGreen < 0){ //if the value has become out of range (<0) leave it at 0
-    		newGreen = 0.0; 
+    		newGreen = 0; 
     	}
     	if (newGreen > 255){ //if the value has become out of range (>255) leave it at 255
-    		newGreen = 255.0; 
+    		newGreen = 255; 
     	}
     	
     	//create the number by which we will mutate the color component (max is 50)
-    	Double newBlue = (new MersenneTwisterRNG().nextDouble() * 20.0);
+    	int newBlue = new MersenneTwisterRNG().nextInt(20) ;
     	if ((new MersenneTwisterRNG().nextDouble() < 0.5) || (color.getBlue() == 255)){ //50% chance to either add or subtract
     		newBlue *= -1;
     	}
-    	newBlue = (double)color.getBlue() + newBlue; //apply the mutation to the color
+    	newBlue = color.getBlue() + newBlue; //apply the mutation to the color
     	if (newBlue < 0){ //if the value has become out of range (<0) leave it at 0
-    		newBlue = 0.0; 
+    		newBlue = 0; 
     	}
     	if (newBlue > 255){ //if the value has become out of range (>255) leave it at 255
-    		newBlue = 255.0; 
+    		newBlue = 255; 
     	}
     	
     	//create the number by which we will mutate the color component (max is 50)
-    	Double newAlpha = (new MersenneTwisterRNG().nextDouble() * 20.0);
+    	int newAlpha = new MersenneTwisterRNG().nextInt(20) ;
     	if ((new MersenneTwisterRNG().nextDouble() < 0.5) || (color.getAlpha() > 127)){ //50% chance to either add or subtract
     		newAlpha *= -1;
     	}
-    	newAlpha = (double)color.getAlpha() + newAlpha; //apply the mutation to the color
+    	newAlpha = color.getAlpha() + newAlpha; //apply the mutation to the color
     	if (newAlpha < 10){ //if the value has become out of range (<10) leave it at 10 (less than 10 is almost invisible)
-    		newAlpha = 10.0; 
+    		newAlpha = 10; 
     	}
     	if (newAlpha > 127){ //if the value has become out of range (>127) leave it at 127
-    		newAlpha = 127.0; 
+    		newAlpha = 127; 
     	}
 
 
-    	mutatedColor = new Color( newRed.intValue(), newGreen.intValue(),
-    							  newBlue.intValue(),newAlpha.intValue());
+    	mutatedColor = new Color( newRed, newGreen,
+    							  newBlue,newAlpha);
     	return mutatedColor;
     }
 

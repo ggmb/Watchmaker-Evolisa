@@ -8,7 +8,6 @@ import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 public class FitnessFunction implements FitnessEvaluator<List<Circle>>{
 
-	public static Object lock = new Object(); //Simple way of synchronising a variable in generateFitness()
 	
 	@Override
 	public synchronized double getFitness(List<Circle> candidates, 
@@ -64,20 +63,15 @@ public class FitnessFunction implements FitnessEvaluator<List<Circle>>{
 	public synchronized static int generateFitness(BufferedImage originalImage, BufferedImage candidate){
 		int fitness = 0;
 		
+		int red = getDeltaComponent("red", originalImage, candidate);
+		fitness += red;
 		
-			getDeltaComponent("red", originalImage, candidate);
-			int red = getDeltaComponent("red", originalImage, candidate);
-			fitness += red;
-		
-		
-			getDeltaComponent("green", originalImage, candidate);
-			int green = getDeltaComponent("green", originalImage, candidate);
-			fitness += green;
-		
-			getDeltaComponent("blue", originalImage, candidate);
-			int blue = getDeltaComponent("blue", originalImage, candidate);	
-			fitness += blue;
-		
+		int green = getDeltaComponent("green", originalImage, candidate);
+		fitness += green;
+	
+		int blue = getDeltaComponent("blue", originalImage, candidate);	
+		fitness += blue;
+	
 		return fitness;
 	}
 	

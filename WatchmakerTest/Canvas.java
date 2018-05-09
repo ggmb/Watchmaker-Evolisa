@@ -9,14 +9,13 @@ import javax.swing.JPanel;
 public class Canvas extends JPanel{
 
 	public List<Circle> paintingCircles = new ArrayList<Circle>(2);
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	//Painting all the circles in the particular canvas instance
 	public void paintComponent(Graphics g){
 		super.paintComponent(g); 
+	
 		
 		if (!paintingCircles.isEmpty()){
 			for (Circle circle : paintingCircles){
@@ -24,6 +23,7 @@ public class Canvas extends JPanel{
 		        g.fillOval(circle.getX() , circle.getY(), circle.getWidth(), circle.getHeight()); 
 			}
 		}
+		
 	}
 	
 	public synchronized void setCircles(List<Circle> circles){

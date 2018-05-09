@@ -16,18 +16,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.uncommons.watchmaker.framework.termination.UserAbort;
 import org.uncommons.maths.random.MersenneTwisterRNG;
-import org.uncommons.maths.random.Probability;
 import org.uncommons.swing.SwingBackgroundTask;
 import org.uncommons.watchmaker.framework.CachingFitnessEvaluator;
 import org.uncommons.watchmaker.framework.EvolutionEngine;
 import org.uncommons.watchmaker.framework.EvolutionObserver;
+import org.uncommons.watchmaker.framework.EvolutionStrategyEngine;
 import org.uncommons.watchmaker.framework.EvolutionaryOperator;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
-import org.uncommons.watchmaker.framework.GenerationalEvolutionEngine;
 import org.uncommons.watchmaker.framework.PopulationData;
-import org.uncommons.watchmaker.framework.SelectionStrategy;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
-import org.uncommons.watchmaker.framework.selection.TournamentSelection;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -39,7 +36,6 @@ public class UserInterface {
 	public static BufferedImage targetImage;
 	public UserAbort abort = new UserAbort();
 	public static Canvas canvas;
-	public static int tempFitness = 99999999;
 	
 	public void readImage(){
 		try {
@@ -132,7 +128,7 @@ public class UserInterface {
 			//creating the list of mutations
 			List<EvolutionaryOperator<List<Circle>>> operators
 		    	= new LinkedList<EvolutionaryOperator<List<Circle>>>();
-			operators.add(new AddCircleMutation()); //so far 1 mutation
+			operators.add(new AddCircleMutation()); 
 			operators.add(new CircleColorMutation()); 
 			operators.add(new CircleSizeMutation());
 			operators.add(new MoveCircleMutation());
@@ -146,15 +142,11 @@ public class UserInterface {
 			FitnessEvaluator<List<Circle>> evaluator
             = new CachingFitnessEvaluator<List<Circle>>(new FitnessFunction());
 			
-			SelectionStrategy<Object> selection = new TournamentSelection(new Probability(0.7));
 			Random rng = new MersenneTwisterRNG();
 			
-			EvolutionEngine<List<Circle>> engine
-				= new GenerationalEvolutionEngine<List<Circle>>(factory,
-                                                                     pipeline,
-                                                                     evaluator,
-                                                                     selection,
-                                                                     rng);
+			//evolution strategy engine to allow a 1+1 Evolution strategy
+			EvolutionEngine<List<Circle>> engine = new EvolutionStrategyEngine<List<Circle>>(factory, 
+																pipeline, evaluator, true, 1, rng);
 			
 			engine.addEvolutionObserver(new EvolutionObserver<List<Circle>>()
 			{
@@ -168,8 +160,8 @@ public class UserInterface {
 				}
 			});
 			
-			//new Stagnation(1000, false)
-			return engine.evolve(5, 1, abort  ); // , new TargetFitness( 1000, true), new GenerationCount(100));
+
+			return engine.evolve(1, 0, abort  ); //1 candidate, 0 elitism and only finish when user presses abort button
 		}
 		
 		@Override
